@@ -1,5 +1,6 @@
 package com.marciosilva.cursomc.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.marciosilva.cursomc.domain.Categoria;
 import com.marciosilva.cursomc.repositories.CategoriaRepository;
-import com.marciosilva.cursomc.services.exception.ObjectNotFoundException;
 import com.marciosilva.cursomc.services.exception.DataViolationException;
+import com.marciosilva.cursomc.services.exception.ObjectNotFoundException;
 
 @Service
 public class CategoriaService {
@@ -41,5 +42,8 @@ public class CategoriaService {
 		catch (DataIntegrityViolationException e) {
 			throw new DataViolationException("Categoria com produtos nao podem ser deletadas.");
 		}
+	}
+	public List<Categoria> findAll(){
+		return repo.findAll();
 	}
 }
