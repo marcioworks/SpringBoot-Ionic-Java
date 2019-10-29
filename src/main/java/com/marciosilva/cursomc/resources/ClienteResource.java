@@ -21,6 +21,7 @@ import com.marciosilva.cursomc.domain.Categoria;
 import com.marciosilva.cursomc.domain.Cliente;
 import com.marciosilva.cursomc.dto.CategoriaDTO;
 import com.marciosilva.cursomc.dto.ClienteDTO;
+import com.marciosilva.cursomc.dto.ClienteNewDTO;
 import com.marciosilva.cursomc.services.ClienteService;
 
 @RestController
@@ -46,7 +47,7 @@ public class ClienteResource {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO objDto){
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDto){
 		Cliente obj = service.fromDto(objDto);
 		obj = service.insert(obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")

@@ -3,6 +3,8 @@ package com.marciosilva.cursomc.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -11,9 +13,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.marciosilva.cursomc.domain.Categoria;
+import com.marciosilva.cursomc.domain.Cidade;
 import com.marciosilva.cursomc.domain.Cliente;
+import com.marciosilva.cursomc.domain.Endereco;
+import com.marciosilva.cursomc.domain.enumns.TipoCliente;
 import com.marciosilva.cursomc.dto.ClienteDTO;
+import com.marciosilva.cursomc.dto.ClienteNewDTO;
 import com.marciosilva.cursomc.repositories.ClienteRepository;
+import com.marciosilva.cursomc.repositories.EnderecoRepository;
 import com.marciosilva.cursomc.services.exception.DataViolationException;
 import com.marciosilva.cursomc.services.exception.ObjectNotFoundException;
 
@@ -23,15 +30,21 @@ public class ClienteService {
 	@Autowired
 	private ClienteRepository repo;
 	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+	
 	public Cliente find(Integer id) {
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new  ObjectNotFoundException("Cliente nao encontado! Id: "+id 
 				+", Tipo: "+Cliente.class.getName()));
 	}
 	
+	@Transactional
 	public Cliente insert(Cliente obj) {
 		obj.setId(null);
-		return repo.save(obj);
+		obj = repo.save(obj);
+		enderecoRepository.saveAll(obj.getEnderecos());
+		return obj;
 	}
 	
 	public Cliente update(Cliente obj) {
@@ -61,6 +74,22 @@ public class ClienteService {
 	public Cliente fromDto(ClienteDTO obj) {
 		return new Cliente(obj.getId(),obj.getName(),obj.getEmail(),null,null);
 	}
+	
+	public Cliente fromDto(ClienteNewDTO objDto) {
+		Cliente cli = new Cliente(null, objDto.getName(), objDto.getEmail(), objDto.getCpfOuCnpj(), TipoCliente.toEnum(objDto.getTipo()));
+		Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
+		Endereco end = new Endereco(null, objDto.getLogadouro(), objDto.getNumero(), objDto.getComplemento(), objDto.getBairro(), objDto.getCep(), cli, cid);
+		cli.getEnderecos().add(end);
+		cli.getTelefones().add(objDto.getTelefone1());
+		if (objDto.getTelefone2()!=null) {
+			cli.getTelefones().add(objDto.getTelefone2());
+		}
+		if (objDto.getTelefone3()!=null) {
+			cli.getTelefones().add(objDto.getTelefone3());
+		}
+		return cli;
+	}
+	
 	
 	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setName(obj.getName());
