@@ -2,20 +2,36 @@ package com.marciosilva.cursomc.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.marciosilva.cursomc.services.validator.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNewDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@NotEmpty(message = "O campo Nao pode ser vazio")
+	@Length(min = 5,max = 120, message = "o campo deve ter no minimo 5 e no maximo 120 caracteres!")
 	private String name;
+	
+	@NotEmpty(message = "O campo Nao pode ser vazio")
+	@Length(min = 5,max = 120, message = "o campo deve ter no minimo 5 e no maximo 120 caracteres!")
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipo;
 
+	@NotEmpty(message = "O campo Nao pode ser vazio")
 	private String logadouro;
+	
 	private String numero;
 	private String complemento;
 	private String bairro;
+	@NotEmpty(message = "O campo Nao pode ser vazio")
 	private String cep;
 
+	@NotEmpty(message = "O campo Nao pode ser vazio")
 	private String telefone1;
 	private String telefone2;
 	private String telefone3;
