@@ -33,6 +33,7 @@ public static final String[] PUBLIC_MATCHERS = {
 			
 			"/produtos/**",
 			"/categorias/**"
+			
 	};
 	
 	@Override
