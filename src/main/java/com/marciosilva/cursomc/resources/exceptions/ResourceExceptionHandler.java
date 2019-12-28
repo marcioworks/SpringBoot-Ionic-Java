@@ -1,6 +1,6 @@
 package com.marciosilva.cursomc.resources.exceptions;
 
-import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import com.marciosilva.cursomc.services.exception.ObjectNotFoundException;
 public class ResourceExceptionHandler {
 
 	@ExceptionHandler(ObjectNotFoundException.class)
-	public ResponseEntity<StandardError> objNotFound(ObjectNotFoundException e,HttpServlet request){
+	public ResponseEntity<StandardError> objNotFound(ObjectNotFoundException e,HttpServletRequest request){
 		
 		StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(),e.getMessage(), System.currentTimeMillis());
 		
@@ -25,7 +25,7 @@ public class ResourceExceptionHandler {
 	}
 	
 	@ExceptionHandler(DataViolationException.class)
-	public ResponseEntity<StandardError> dataviolation(DataViolationException e,HttpServlet request){
+	public ResponseEntity<StandardError> dataviolation(DataViolationException e,HttpServletRequest request){
 		
 		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(),e.getMessage(), System.currentTimeMillis());
 		
@@ -33,7 +33,7 @@ public class ResourceExceptionHandler {
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e,HttpServlet request){
+	public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e,HttpServletRequest request){
 		
 		ValidationError err = new ValidationError(HttpStatus.BAD_REQUEST.value(),"Error de Validação", System.currentTimeMillis());
 		
@@ -44,7 +44,7 @@ public class ResourceExceptionHandler {
 	}
 	
 	@ExceptionHandler(AuthorizationException.class)
-	public ResponseEntity<StandardError> Authorization(AuthorizationException e,HttpServlet request){
+	public ResponseEntity<StandardError> Authorization(AuthorizationException e,HttpServletRequest request){
 		
 		StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(),e.getMessage(), System.currentTimeMillis());
 		
